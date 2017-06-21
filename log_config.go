@@ -22,8 +22,11 @@ import (
 )
 
 var (
-	ErrUnknownLogHookFormat     = errors.New("Failed to init log hooks: unknown hook found")
-	ErrMissingLogHookSetting    = errors.New("Failed to init log hooks: missing required hook setting")
+	// ErrUnknownLogHookFormat is the error returned when trying to initialise hook of unknown format
+	ErrUnknownLogHookFormat = errors.New("Failed to init log hooks: unknown hook found")
+	// ErrMissingLogHookSetting is the error returned when trying to initialise hook with required settings missing
+	ErrMissingLogHookSetting = errors.New("Failed to init log hooks: missing required hook setting")
+	// ErrFailedToConfigureLogHook is the error returned when hook configuring failed for some reasons
 	ErrFailedToConfigureLogHook = errors.New("Failed to init log hooks: failed to configure hook")
 )
 
@@ -63,32 +66,46 @@ var (
 	}
 )
 
+// LogFormat type for enumerating available log formats
 type LogFormat string
+
+// LogWriter for enumerating available log writers
 type LogWriter string
 
 const (
-	Text     LogFormat = "text"
-	JSON     LogFormat = "json"
+	// Text is plain text log format
+	Text LogFormat = "text"
+	// JSON is json log format
+	JSON LogFormat = "json"
+	// Logstash is json log format with some additional fields required for logstash
 	Logstash LogFormat = "logstash"
 
-	StdErr  LogWriter = "stderr"
-	StdOut  LogWriter = "stdout"
+	// StdErr is os stderr log writer
+	StdErr LogWriter = "stderr"
+	// StdOut is os stdout log writer
+	StdOut LogWriter = "stdout"
+	// Discard is the quite mode for log writer aka /dev/null
 	Discard LogWriter = "discard"
 
+	// HookLogstash is logstash hook format
 	HookLogstash = "logstash"
-	HookSyslog   = "syslog"
-	HookGraylog  = "graylog"
+	// HookSyslog is syslog hook format
+	HookSyslog = "syslog"
+	// HookGraylog is graylog hook format
+	HookGraylog = "graylog"
 
 	defaultLevel  = "info"
 	defaultFormat = "json"
 	defaultWriter = "stderr"
 )
 
+// LogHook is a struct holding settings for each enabled hook
 type LogHook struct {
 	Format   string
 	Settings map[string]string
 }
 
+// LogHooks is collection of enabled hooks
 type LogHooks []LogHook
 
 // UnmarshalText is an implementation of encoding.TextUnmarshaler for LogHooks type
@@ -104,6 +121,8 @@ func (lh *LogHooks) UnmarshalText(text []byte) error {
 	return nil
 }
 
+// LogConfig is the struct that stores all the logging configuration and routines for applying configurations
+// to logger
 type LogConfig struct {
 	Level          string            `envconfig:"LOG_LEVEL"`
 	Format         LogFormat         `envconfig:"LOG_FORMAT"`
@@ -114,6 +133,7 @@ type LogConfig struct {
 	mustFlushHooks []log.Hook
 }
 
+// Apply configures logger and all enabled hooks
 func (c LogConfig) Apply() error {
 	level, err := log.ParseLevel(strings.ToLower(c.Level))
 	if nil != err {
@@ -127,6 +147,7 @@ func (c LogConfig) Apply() error {
 	return c.initHooks()
 }
 
+// Flush waits for all buffering loggers to finish flushing buffers
 func (c LogConfig) Flush() {
 	for i := range c.mustFlushHooks {
 		if h, ok := c.mustFlushHooks[i].(*graylog.GraylogHook); ok {
@@ -295,6 +316,7 @@ func getLogstashFormatter(settings map[string]string) log.Formatter {
 	return formatter
 }
 
+// InitDefaults initialises default logger settings
 func InitDefaults(v *viper.Viper, prefix string) {
 	if prefix != "" {
 		if !strings.HasSuffix(prefix, ".") {
