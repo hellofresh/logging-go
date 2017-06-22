@@ -204,14 +204,16 @@ func TestLoadConfigFromEnv(t *testing.T) {
 
 func setGlobalConfigEnv() {
 	os.Setenv("LOG_LEVEL", "info")
-	os.Setenv("LOG_FORMAT", "json")
+	os.Setenv("LOG_FORMAT", "logstash")
+	os.Setenv("LOG_FORMAT_SETTINGS", "type:MyService,ts:RFC3339Nano")
 	os.Setenv("LOG_WRITER", "stderr")
 	os.Setenv("LOG_HOOKS", `[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}}]`)
 }
 
 func assertConfig(t *testing.T, logConfig LogConfig) {
 	assert.Equal(t, "info", logConfig.Level)
-	assert.Equal(t, JSON, logConfig.Format)
+	assert.Equal(t, Logstash, logConfig.Format)
+	assert.Equal(t, map[string]string{"type": "MyService", "ts": "RFC3339Nano"}, logConfig.FormatSettings)
 	assert.Equal(t, StdErr, logConfig.Writer)
 
 	assert.Equal(t, 3, len(logConfig.Hooks))

@@ -1,6 +1,9 @@
 level: info
-format: json
-output: stderr
+format: logstash
+formatSettings:
+  type: MyService
+  ts: RFC3339Nano
+writer: stderr
 hooks:
 - format: logstash
   settings: {network: udp, host: logstash.mycompany.io, port: 8911, type: MyService, ts: RFC3339Nano}
