@@ -126,6 +126,8 @@ export LOG_WRITER="stderr"
 export LOG_HOOKS='[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}}]'
 ```
 
+#### Loading and applying configuration
+
 ```go
 package main
 
@@ -184,25 +186,46 @@ func main() {
 * `formatSettings` (env `LOG_FORMAT_SETTINGS`):
     * `type` (used only for `logstash` format) - any valid string field that will be added to all log entries
     * `ts` (used only for `logstash` format) - `timestamp` field format, the following values are available: `RFC3339`, `RFC3339Nano` (become `time.RFC3339` and  `time.RFC3339Nano` [`time` package constants](https://golang.org/pkg/time/#pkg-constants))
-* `writer` (env `LOG_WRITER`, default: `stderr`): `stderr`, `stdout`, `discard` (`/dev/null`)
+* `writer` (env `LOG_WRITER`, default: `stderr`): `stderr`, `stdout`, `discard`
 * `hooks` (env `LOG_HOOKS`) - each hook has te following fields: `format` and `settings`. Currently te following formats are available:
-  * `logstash` (uses [`github.com/bshuster-repo/logrus-logstash-hook` implementation](https://github.com/bshuster-repo/logrus-logstash-hook)). Settings:
-    * `host` (required) - Logstash host name or IP address
-    * `port` (required) - Logstash host port
-    * `network` (required) - `udp` or `tcp`
-    * `type` - same as `formatSettings.type`
-    * `ts` - same as `formatSettings.ts`
-  * `syslog` (uses [`logstash` implementation of `log/syslog`](https://github.com/Sirupsen/logrus/blob/master/hooks/syslog/syslog.go)). Settings:
-    * `host` (required) - Syslog host name or IP address
-    * `port` (required) - Syslog host port
-    * `network` (required) - `udp` or `tcp`
-    * `severity` (required) - severity part of [syslog priority](https://golang.org/pkg/log/syslog/#Priority) (`LOG_INFO`, `LOG_NOTICE`, etc.)
-    * `facility` (required) - facility part of [syslog priority](https://golang.org/pkg/log/syslog/#Priority) (`LOG_LOCAL0`, `LOG_CRON`, etc.)
-    * `tag` - any valid string that will be sent to syslog as tag
-  * `graylog` (uses [`github.com/gemnasium/logrus-graylog-hook` implementation](https://github.com/gemnasium/logrus-graylog-hook)). Settings:
-    * `host` (required) - Graylog host name or IP address
-    * `port` (required) - Graylog host port
-    * `async` - send log messages to Graylog in synchronous or asynchronous mode, string value must be [parsable to bool](https://golang.org/pkg/strconv/#ParseBool)
+
+#### `logstash`
+
+Uses [`github.com/bshuster-repo/logrus-logstash-hook` implementation](https://github.com/bshuster-repo/logrus-logstash-hook)
+
+| Setting   | Required | Description                      |
+|-----------|----------|----------------------------------|
+| `host`    | **YES**  | Logstash host name or IP address |
+| `port`    | **YES**  | Logstash host port               |
+| `network` | **YES**  | `udp` or `tcp`                   |
+| `type`    | no       | same as `formatSettings.type`    |
+| `ts`      | no       | same as `formatSettings.type`    |
+
+
+#### `syslog`
+
+Uses [`logstash` implementation of `log/syslog`](https://github.com/Sirupsen/logrus/blob/master/hooks/syslog/syslog.go)
+
+| Setting    | Required | Description                                                                                                      |
+|------------|----------|------------------------------------------------------------------------------------------------------------------|
+| `host`     | **YES**  | Syslog host name or IP address                                                                                   |
+| `port`     | **YES**  | Syslog host port                                                                                                 |
+| `network`  | **YES**  | `udp` or `tcp`                                                                                                   |
+| `severity` | **YES**  | severity part of [syslog priority](https://golang.org/pkg/log/syslog/#Priority) (`LOG_INFO`, `LOG_NOTICE`, etc.) |
+| `facility` | **YES**  | facility part of [syslog priority](https://golang.org/pkg/log/syslog/#Priority) (`LOG_LOCAL0`, `LOG_CRON`, etc.) |
+| `tag`      | no       | any valid string that will be sent to syslog as tag                                                              |
+
+
+#### `graylog`
+
+Uses [`github.com/gemnasium/logrus-graylog-hook` implementation](https://github.com/gemnasium/logrus-graylog-hook)
+
+| Setting | Required | Description                                                                                                                                          |
+|---------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `host`  | **YES**  | Graylog host name or IP address                                                                                                                      |
+| `port`  | **YES**  | Graylog host port                                                                                                                                    |
+| `async` | no       | send log messages to Graylog in synchronous or asynchronous mode, string value must be [parsable to bool](https://golang.org/pkg/strconv/#ParseBool) |
+
 
 ## Contributing
 
