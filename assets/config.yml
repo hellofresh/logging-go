@@ -1,0 +1,13 @@
+level: info
+format: logstash
+formatSettings:
+  type: MyService
+  ts: RFC3339Nano
+writer: stderr
+hooks:
+- format: logstash
+  settings: {network: udp, host: logstash.mycompany.io, port: 8911, type: MyService, ts: RFC3339Nano}
+- format: syslog
+  settings: {network: udp, host: localhost, port: 514, tag: MyService, facility: LOG_LOCAL0, severity: LOG_INFO}
+- format: graylog
+  settings: {host: graylog.mycompany.io, port: 9000}
