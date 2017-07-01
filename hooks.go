@@ -49,10 +49,10 @@ func (c LogConfig) initGraylogHook(h LogHook) error {
 	}
 	var hook *graylog.GraylogHook
 	if async {
-		hook = graylog.NewGraylogHook(fmt.Sprintf("%s:%s", h.Settings["host"], h.Settings["port"]), extra)
-	} else {
 		hook = graylog.NewAsyncGraylogHook(fmt.Sprintf("%s:%s", h.Settings["host"], h.Settings["port"]), extra)
 		c.mustFlushHooks = append(c.mustFlushHooks, hook)
+	} else {
+		hook = graylog.NewGraylogHook(fmt.Sprintf("%s:%s", h.Settings["host"], h.Settings["port"]), extra)
 	}
 
 	log.AddHook(hook)
