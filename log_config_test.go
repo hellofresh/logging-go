@@ -2,7 +2,6 @@ package logging
 
 import (
 	"io/ioutil"
-	"log/syslog"
 	"os"
 	"path/filepath"
 	"testing"
@@ -114,30 +113,6 @@ func TestLogConfig_Apply_initHooks(t *testing.T) {
 	c = LogConfig{Hooks: LogHooks{LogHook{Format: HookGraylog, Settings: map[string]string{"host": "host", "port": "1234", "async": "???"}}}}
 	err = c.initHooks()
 	assert.Equal(t, ErrFailedToConfigureLogHook, err)
-}
-
-func Test_getSyslogPriority(t *testing.T) {
-	_, err := getSyslogPriority(map[string]string{})
-	assert.Error(t, err)
-
-	_, err = getSyslogPriority(map[string]string{"severity": "severity"})
-	assert.Error(t, err)
-
-	_, err = getSyslogPriority(map[string]string{"facility": "facility"})
-	assert.Error(t, err)
-
-	_, err = getSyslogPriority(map[string]string{"severity": "severity", "facility": "facility"})
-	assert.Error(t, err)
-
-	_, err = getSyslogPriority(map[string]string{"severity": "LOG_INFO", "facility": "facility"})
-	assert.Error(t, err)
-
-	_, err = getSyslogPriority(map[string]string{"severity": "severity", "facility": "LOG_LOCAL0"})
-	assert.Error(t, err)
-
-	priority, err := getSyslogPriority(map[string]string{"severity": "LOG_INFO", "facility": "LOG_LOCAL0"})
-	assert.NoError(t, err)
-	assert.Equal(t, syslog.LOG_INFO|syslog.LOG_LOCAL0, priority)
 }
 
 func TestLogHooks_UnmarshalText(t *testing.T) {
