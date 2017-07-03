@@ -204,6 +204,7 @@ Uses [`github.com/bshuster-repo/logrus-logstash-hook` implementation](https://gi
 
 #### `syslog`
 
+Not supported on Windows.
 Uses [`logstash` implementation of `log/syslog`](https://github.com/Sirupsen/logrus/blob/master/hooks/syslog/syslog.go)
 
 | Setting    | Required | Description                                                                                                      |

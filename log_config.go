@@ -7,16 +7,13 @@ import (
 	"io"
 	"io/ioutil"
 	"log/syslog"
-	"net"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/kelseyhightower/envconfig"
 	log "github.com/sirupsen/logrus"
-	"github.com/sirupsen/logrus/hooks/syslog"
 	"github.com/spf13/viper"
 	"gopkg.in/gemnasium/logrus-graylog-hook.v2"
 )
@@ -180,88 +177,6 @@ func (c LogConfig) getFormatter() log.Formatter {
 	default:
 		return &log.TextFormatter{}
 	}
-}
-
-func (c LogConfig) initHooks() error {
-	for _, h := range c.Hooks {
-		if err := c.validateRequiredHookSettings(h, []string{"host", "port"}); err != nil {
-			return err
-		}
-		host, _ := h.Settings["host"]
-		port, _ := h.Settings["port"]
-
-		switch h.Format {
-		case HookLogstash:
-			if err := c.validateRequiredHookSettings(h, []string{"network"}); err != nil {
-				return err
-			}
-			network, _ := h.Settings["network"]
-
-			conn, err := net.Dial(network, fmt.Sprintf("%s:%s", host, port))
-			if nil != err {
-				log.WithError(err).WithField("hook", h.Format).Error("Failed to connect to logstash")
-				return ErrFailedToConfigureLogHook
-			}
-
-			formatter := getLogstashFormatter(h.Settings)
-
-			hook := logrustash.New(conn, formatter)
-			log.AddHook(hook)
-
-		case HookSyslog:
-			if err := c.validateRequiredHookSettings(h, []string{"network"}); err != nil {
-				return err
-			}
-			network, _ := h.Settings["network"]
-
-			priority, err := getSyslogPriority(h.Settings)
-			if nil != err {
-				log.WithError(err).WithField("hook", h.Format).Error("Failed to configure hook")
-				return ErrFailedToConfigureLogHook
-			}
-
-			tag, _ := h.Settings["tag"]
-			hook, err := logrus_syslog.NewSyslogHook(network, fmt.Sprintf("%s:%s", host, port), priority, tag)
-			if nil != err {
-				log.WithError(err).WithField("hook", h.Format).Error("Failed to configure hook")
-				return ErrFailedToConfigureLogHook
-			}
-
-			log.AddHook(hook)
-
-		case HookGraylog:
-			var async bool
-			var err error
-			if asyncStr, ok := h.Settings["async"]; ok {
-				async, err = strconv.ParseBool(asyncStr)
-				if nil != err {
-					log.WithError(err).WithField("hook", h.Format).Error("Failed to parse async setting")
-					return ErrFailedToConfigureLogHook
-				}
-			}
-
-			extra := make(map[string]interface{})
-			for k, v := range h.Settings {
-				if k != "host" && k != "port" && k != "async" {
-					extra[k] = v
-				}
-			}
-			var hook *graylog.GraylogHook
-			if async {
-				hook = graylog.NewGraylogHook(fmt.Sprintf("%s:%s", host, port), extra)
-			} else {
-				hook = graylog.NewAsyncGraylogHook(fmt.Sprintf("%s:%s", host, port), extra)
-				c.mustFlushHooks = append(c.mustFlushHooks, hook)
-			}
-
-			log.AddHook(hook)
-
-		default:
-			return ErrUnknownLogHookFormat
-		}
-	}
-
-	return nil
 }
 
 func (c LogConfig) validateRequiredHookSettings(h LogHook, required []string) error {
