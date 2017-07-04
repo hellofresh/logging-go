@@ -1,8 +1,8 @@
-hash: 8672bbb39c69ad9821bc35c481fec6f4e95b176978539cd64c6a03915601291a
-updated: 2017-07-04T15:09:52.373216179+02:00
+hash: 17cb041cee5eec0ef6335d1aabdac59dd6deefc040a22a3b7903875a31334e8a
+updated: 2017-07-04T18:14:22.241873374+02:00
 imports:
 - name: github.com/bshuster-repo/logrus-logstash-hook
-  version: ea59b04518367f2aafe8cf6d46a7d60605d075ce
+  version: 41029b88e98c8b459ff27040389b69a4db2a8d07
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/hashicorp/hcl
@@ -22,10 +22,8 @@ imports:
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
 - name: github.com/mitchellh/mapstructure
   version: d0303fe809921458f417bcf828397a65db30a7e4
-- name: github.com/pelletier/go-buffruneio
-  version: c37440a7cf42ac63b919c752ca73a85067e05992
 - name: github.com/pelletier/go-toml
-  version: fe7536c3dee2596cdd23ee9976a17c22bdaae286
+  version: 69d355db5304c0f7f809a2edc054553e7142f016
 - name: github.com/pkg/errors
   version: c605e284fe17294bda444b34710735b29d1a9d90
 - name: github.com/sirupsen/logrus
@@ -43,13 +41,13 @@ imports:
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
-  version: a1ecfa6a20bd4ef9e9caded262ee1b1b26847675
+  version: c1de95864d73a5465492829d7cb2dd422b19ac96
 - name: golang.org/x/sys
-  version: fb4cac33e3196ff7f507ab9b2d2a44b0142f5b5a
+  version: 94b76065f2d2081d0fef24a6e67c571f51a6408a
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: 9e2f80a6ba7ed4ba13e0cd4b1f094bf916875735
+  version: 2bf8f2a19ec09c670e931282edfe6567f6be21c9
   subpackages:
   - transform
   - unicode/norm
