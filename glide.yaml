@@ -1,7 +1,6 @@
 package: github.com/hellofresh/logging-go
 import:
 - package: github.com/bshuster-repo/logrus-logstash-hook
-  version: ^1.0.0-beta
 - package: github.com/kelseyhightower/envconfig
   version: ^v1.3.0
 - package: github.com/sirupsen/logrus
