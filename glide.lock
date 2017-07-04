@@ -1,5 +1,5 @@
-hash: 1099bd0c01cfa18051ccc7433a3a592e850bac4ae7447b94e61d3545289af2a5
-updated: 2017-06-20T18:42:05.735255571+02:00
+hash: 8672bbb39c69ad9821bc35c481fec6f4e95b176978539cd64c6a03915601291a
+updated: 2017-07-04T15:09:52.373216179+02:00
 imports:
 - name: github.com/bshuster-repo/logrus-logstash-hook
   version: ea59b04518367f2aafe8cf6d46a7d60605d075ce
@@ -27,7 +27,7 @@ imports:
 - name: github.com/pelletier/go-toml
   version: fe7536c3dee2596cdd23ee9976a17c22bdaae286
 - name: github.com/pkg/errors
-  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+  version: c605e284fe17294bda444b34710735b29d1a9d90
 - name: github.com/sirupsen/logrus
   version: 202f25545ea4cf9b191ff7f846df5d87c9382c2b
   subpackages:
@@ -43,13 +43,13 @@ imports:
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
-  version: c1de95864d73a5465492829d7cb2dd422b19ac96
+  version: a1ecfa6a20bd4ef9e9caded262ee1b1b26847675
 - name: golang.org/x/sys
   version: fb4cac33e3196ff7f507ab9b2d2a44b0142f5b5a
   subpackages:
   - unix
 - name: golang.org/x/text
-  version: 4e9ab9ee170f2a39bd66c92b3e0a47ff47a4bc77
+  version: 9e2f80a6ba7ed4ba13e0cd4b1f094bf916875735
   subpackages:
   - transform
   - unicode/norm
@@ -70,3 +70,4 @@ testImports:
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
   - assert
+  - require
