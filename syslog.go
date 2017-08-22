@@ -7,7 +7,7 @@ import (
 	"log/syslog"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/sirupsen/logrus/hooks/syslog"
+	logrus_syslog "github.com/sirupsen/logrus/hooks/syslog"
 )
 
 var (
