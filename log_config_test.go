@@ -42,38 +42,29 @@ func TestLogConfig_Apply_getFormatter(t *testing.T) {
 
 	c = LogConfig{Format: Logstash}
 	formatter := c.getFormatter()
-	assert.IsType(t, logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ := formatter.(logrustash.LogstashFormatter)
-	assert.Equal(t, "", logstashFormatter.Fields["type"])
-
-	jsonFormatter, ok := logstashFormatter.Formatter.(*log.JSONFormatter)
-	assert.True(t, ok)
-	assert.Equal(t, "", jsonFormatter.TimestampFormat)
+	logstashFormatter, _ := formatter.(*logrustash.LogstashFormatter)
+	assert.Equal(t, "", logstashFormatter.Type)
+	assert.Equal(t, "", logstashFormatter.TimestampFormat)
 
 	testType := "TestType"
 
 	c = LogConfig{Format: Logstash, FormatSettings: map[string]string{"type": testType, "ts": "RFC3339"}}
 	formatter = c.getFormatter()
-	assert.IsType(t, logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ = formatter.(logrustash.LogstashFormatter)
-	assert.Equal(t, testType, logstashFormatter.Fields["type"])
-
-	jsonFormatter, ok = logstashFormatter.Formatter.(*log.JSONFormatter)
-	assert.True(t, ok)
-	assert.Equal(t, time.RFC3339, jsonFormatter.TimestampFormat)
+	logstashFormatter, _ = formatter.(*logrustash.LogstashFormatter)
+	assert.Equal(t, testType, logstashFormatter.Type)
+	assert.Equal(t, time.RFC3339, logstashFormatter.TimestampFormat)
 
 	c = LogConfig{Format: Logstash, FormatSettings: map[string]string{"type": testType, "ts": "RFC3339Nano"}}
 	formatter = c.getFormatter()
-	assert.IsType(t, logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ = formatter.(logrustash.LogstashFormatter)
-	assert.Equal(t, testType, logstashFormatter.Fields["type"])
-
-	jsonFormatter, ok = logstashFormatter.Formatter.(*log.JSONFormatter)
-	assert.True(t, ok)
-	assert.Equal(t, time.RFC3339Nano, jsonFormatter.TimestampFormat)
+	logstashFormatter, _ = formatter.(*logrustash.LogstashFormatter)
+	assert.Equal(t, testType, logstashFormatter.Type)
+	assert.Equal(t, time.RFC3339Nano, logstashFormatter.TimestampFormat)
 }
 
 func TestLogConfig_Apply(t *testing.T) {
@@ -124,14 +115,6 @@ func TestLogHooks_UnmarshalText(t *testing.T) {
 
 	_, err := LoadConfigFromEnv(v)
 	assert.Error(t, err)
-}
-
-func Test_getLogstashFormatter(t *testing.T) {
-	formatter := logrustash.DefaultFormatter(log.Fields{"type": "TestTest"})
-	logstashFormatter, ok := formatter.(logrustash.LogstashFormatter)
-	assert.True(t, ok)
-
-	assert.IsType(t, &log.JSONFormatter{}, logstashFormatter.Formatter)
 }
 
 func TestLoad(t *testing.T) {
