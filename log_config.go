@@ -160,13 +160,7 @@ func getLogstashFormatter(settings map[string]string) log.Formatter {
 	}
 	tsFormat, _ := tsFormats[logstashTSFormat]
 
-	formatter := logrustash.DefaultFormatter(log.Fields{"type": logstashType})
-	logstashFormatter, _ := formatter.(logrustash.LogstashFormatter)
-	jsonFormatter, _ := logstashFormatter.Formatter.(*log.JSONFormatter)
-
-	jsonFormatter.TimestampFormat = tsFormat
-
-	return formatter
+	return &logrustash.LogstashFormatter{Type: logstashType, TimestampFormat: tsFormat}
 }
 
 // InitDefaults initialises default logger settings

@@ -22,9 +22,14 @@ func (c LogConfig) initLogstashHook(h LogHook) error {
 		return ErrFailedToConfigureLogHook
 	}
 
-	formatter := getLogstashFormatter(h.Settings)
+	formatter := getLogstashFormatter(h.Settings).(*logrustash.LogstashFormatter)
 
-	hook := logrustash.New(conn, formatter)
+	hook, err := logrustash.NewHookWithConn(conn, formatter.Type)
+	if nil != err {
+		log.WithError(err).WithField("hook", h.Format).Error("Failed to instantiate logstash hook")
+		return ErrFailedToConfigureLogHook
+	}
+	hook.TimeFormat = formatter.TimestampFormat
 	log.AddHook(hook)
 
 	return nil

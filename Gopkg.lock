@@ -4,8 +4,8 @@
 [[projects]]
   name = "github.com/bshuster-repo/logrus-logstash-hook"
   packages = ["."]
-  revision = "ea59b04518367f2aafe8cf6d46a7d60605d075ce"
-  version = "1.0-beta"
+  revision = "dbc1e22735aa6ed7bd9579a407c17bc7c4a4e046"
+  version = "v0.4.1"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
@@ -142,6 +142,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f6eb5fd03a090f5eb5f9de0e80a487192ca579a7d30c0090e9e2580225bc5294"
+  inputs-digest = "ce79896d2d271a301ab497cd504ed37aace820d99b524c62f0c98db22a974947"
   solver-name = "gps-cdcl"
   solver-version = 1
