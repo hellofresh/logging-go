@@ -31,7 +31,7 @@
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.0.3"
+  version = "1.0.4"
 
 [[constraint]]
   name = "github.com/spf13/viper"
@@ -39,8 +39,8 @@
 
 [[constraint]]
   name = "github.com/stretchr/testify"
-  version = "1.1.4"
+  version = "1.2.1"
 
 [[constraint]]
   name = "gopkg.in/gemnasium/logrus-graylog-hook.v2"
-  version = "2.0.6"
+  version = "2.0.7"
