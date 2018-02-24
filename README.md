@@ -199,7 +199,7 @@ Uses [`github.com/bshuster-repo/logrus-logstash-hook` implementation](https://gi
 | `port`    | **YES**  | Logstash host port               |
 | `network` | **YES**  | `udp` or `tcp`                   |
 | `type`    | no       | same as `formatSettings.type`    |
-| `ts`      | no       | same as `formatSettings.type`    |
+| `ts`      | no       | same as `formatSettings.ts`      |
 
 
 #### `syslog`
