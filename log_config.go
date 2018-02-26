@@ -138,7 +138,7 @@ func (c LogConfig) getFormatter() log.Formatter {
 	case Logstash:
 		return getLogstashFormatter(c.FormatSettings)
 	case Stackdriver:
-		return &stackdriver.Formatter{}
+		return getStackdriverFormatter(c.FormatSettings)
 	case Text:
 		fallthrough
 	default:
@@ -166,6 +166,22 @@ func getLogstashFormatter(settings map[string]string) log.Formatter {
 	tsFormat, _ := tsFormats[logstashTSFormat]
 
 	return &logrustash.LogstashFormatter{Type: logstashType, TimestampFormat: tsFormat}
+}
+
+func getStackdriverFormatter(settings map[string]string) log.Formatter {
+	options := []stackdriver.Option{}
+
+	service, ok := settings["service"]
+	if ok {
+		options = append(options, stackdriver.WithService(service))
+	}
+
+	version, ok := settings["version"]
+	if ok {
+		options = append(options, stackdriver.WithVersion(version))
+	}
+
+	return stackdriver.NewFormatter(options...)
 }
 
 // InitDefaults initialises default logger settings
