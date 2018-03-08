@@ -13,5 +13,6 @@ install:
 
 script:
   - make test
-  - $GOPATH/bin/overalls -project=github.com/hellofresh/logging-go -covermode=count
-  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
+  # run coverage only if token is present
+  - test $COVERALLS_TOKEN && $GOPATH/bin/overalls -project=github.com/hellofresh/logging-go -covermode=count
+  - test $COVERALLS_TOKEN && $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
