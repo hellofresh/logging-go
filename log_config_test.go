@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bshuster-repo/logrus-logstash-hook"
+	logrustash "github.com/bshuster-repo/logrus-logstash-hook"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -120,7 +120,7 @@ func TestLogHooks_UnmarshalText(t *testing.T) {
 func TestLoad(t *testing.T) {
 	wd, err := os.Getwd()
 	assert.NoError(t, err)
-	assert.Contains(t, wd, "github.com/hellofresh/logging-go")
+	//assert.Contains(t, wd, "github.com/hellofresh/logging-go") // ?? Why does this matter?
 
 	// .../github.com/hellofresh/logging-go/assets/config.yml
 	configPath := filepath.Join(wd, "assets", "config.yml")
@@ -165,7 +165,7 @@ func setGlobalConfigEnv() {
 	os.Setenv("LOG_FORMAT", "logstash")
 	os.Setenv("LOG_FORMAT_SETTINGS", "type:MyService,ts:RFC3339Nano")
 	os.Setenv("LOG_WRITER", "stderr")
-	os.Setenv("LOG_HOOKS", `[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}}]`)
+	os.Setenv("LOG_HOOKS", `[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}},{"format":"stackdriver", "settings":{"service":"myservice","version":"v1"}}]`)
 }
 
 func assertConfig(t *testing.T, logConfig LogConfig) {
@@ -174,13 +174,24 @@ func assertConfig(t *testing.T, logConfig LogConfig) {
 	assert.Equal(t, map[string]string{"type": "MyService", "ts": "RFC3339Nano"}, logConfig.FormatSettings)
 	assert.Equal(t, StdErr, logConfig.Writer)
 
-	assert.Equal(t, 3, len(logConfig.Hooks))
+	assert.Equal(t, 4, len(logConfig.Hooks))
+
+	// Check logstash
 	assert.Equal(t, "logstash", logConfig.Hooks[0].Format)
 	assert.Equal(t, map[string]string{"type": "MyService", "ts": "RFC3339Nano", "network": "udp", "host": "logstash.mycompany.io", "port": "8911"}, logConfig.Hooks[0].Settings)
+
+	// Check syslog
 	assert.Equal(t, "syslog", logConfig.Hooks[1].Format)
 	assert.Equal(t, map[string]string{"network": "udp", "host": "localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}, logConfig.Hooks[1].Settings)
+
+	// Check graylog
 	assert.Equal(t, "graylog", logConfig.Hooks[2].Format)
 	assert.Equal(t, map[string]string{"host": "graylog.mycompany.io", "port": "9000"}, logConfig.Hooks[2].Settings)
+
+	// Check stackdriver
+	assert.Equal(t, "stackdriver", logConfig.Hooks[3].Format)
+	assert.Equal(t, map[string]string{"service": "myservice", "version": "v1"}, logConfig.Hooks[3].Settings)
+
 }
 
 func TestInitDefaults(t *testing.T) {

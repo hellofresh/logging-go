@@ -11,3 +11,5 @@ hooks:
   settings: {network: udp, host: localhost, port: 514, tag: MyService, facility: LOG_LOCAL0, severity: LOG_INFO}
 - format: graylog
   settings: {host: graylog.mycompany.io, port: 9000}
+- format: stackdriver
+  settings: {service: myservice, version: v1}

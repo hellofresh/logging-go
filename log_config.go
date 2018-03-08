@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	stackdriver "github.com/TV4/logrus-stackdriver-formatter"
 	"github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/kelseyhightower/envconfig"
 	log "github.com/sirupsen/logrus"
@@ -38,6 +39,8 @@ const (
 	JSON LogFormat = "json"
 	// Logstash is json log format with some additional fields required for logstash
 	Logstash LogFormat = "logstash"
+	// Stackdriver is Google cloud FluentD Stackdriver format
+	Stackdriver LogFormat = "stackdriver"
 
 	// StdErr is os stderr log writer
 	StdErr LogWriter = "stderr"
@@ -134,6 +137,8 @@ func (c LogConfig) getFormatter() log.Formatter {
 		return &log.JSONFormatter{}
 	case Logstash:
 		return getLogstashFormatter(c.FormatSettings)
+	case Stackdriver:
+		return getStackdriverFormatter(c.FormatSettings)
 	case Text:
 		fallthrough
 	default:
@@ -161,6 +166,22 @@ func getLogstashFormatter(settings map[string]string) log.Formatter {
 	tsFormat, _ := tsFormats[logstashTSFormat]
 
 	return &logrustash.LogstashFormatter{Type: logstashType, TimestampFormat: tsFormat}
+}
+
+func getStackdriverFormatter(settings map[string]string) log.Formatter {
+	options := []stackdriver.Option{}
+
+	service, ok := settings["service"]
+	if ok {
+		options = append(options, stackdriver.WithService(service))
+	}
+
+	version, ok := settings["version"]
+	if ok {
+		options = append(options, stackdriver.WithVersion(version))
+	}
+
+	return stackdriver.NewFormatter(options...)
 }
 
 // InitDefaults initialises default logger settings

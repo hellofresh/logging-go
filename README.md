@@ -55,6 +55,8 @@ hooks:
   settings: {network: udp, host: localhost, port: 514, tag: MyService, facility: LOG_LOCAL0, severity: LOG_INFO}
 - format: graylog
   settings: {host: graylog.mycompany.io, port: 9000}
+- format: stackdriver
+  settings: {service: myservice, version: v1}
 ```
 
 #### Environment variable config example
@@ -64,7 +66,7 @@ export LOG_LEVEL="info"
 export LOG_FORMAT="logstash"
 export LOG_FORMAT_SETTINGS="type=MyService,ts:RFC3339Nano"
 export LOG_WRITER="stderr"
-export LOG_HOOKS='[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}}]'
+export LOG_HOOKS='[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}},{"format":"stackdriver", "settings":{"service":"myservice","version":"v1"}}]'
 ```
 
 #### Loading and applying configuration
@@ -113,6 +115,9 @@ log:
       settings: {network: udp, host: localhost, port: 514, tag: MyService, facility: LOG_LOCAL0, severity: LOG_INFO}
     - format: graylog
       settings: {host: graylog.mycompany.io, port: 9000}
+    - format: stackdriver
+      settings: {service: myservice, version: v1}
+
 ```
 
 #### Environment variable config example
@@ -123,7 +128,7 @@ export APP_BAR="34"
 export LOG_LEVEL="info"
 export LOG_FORMAT="json"
 export LOG_WRITER="stderr"
-export LOG_HOOKS='[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}}]'
+export LOG_HOOKS='[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}},{"format":"stackdriver", "settings":{"service":"myservice","version":"v1"}}]'
 ```
 
 #### Loading and applying configuration
@@ -226,6 +231,18 @@ Uses [`github.com/gemnasium/logrus-graylog-hook` implementation](https://github.
 | `host`  | **YES**  | Graylog host name or IP address                                                                                                                      |
 | `port`  | **YES**  | Graylog host port                                                                                                                                    |
 | `async` | no       | send log messages to Graylog in synchronous or asynchronous mode, string value must be [parsable to bool](https://golang.org/pkg/strconv/#ParseBool) |
+
+### `Stackdriver`
+
+Stackdriver formatter for Google Cloud Container Engine(GKE/Kubernetes).
+
+Uses [`github.com/TV4/logrus-stackdriver-formatter` implementation](https://github.com/TV4/logrus-stackdriver-formatter)
+
+| Setting   | Required | Description                                    |
+|-----------|----------|------------------------------------------------|
+| `service` | no       | Optional Service Name referring to this logger |
+| `version` | no       | Optional Service version                       |
+
 
 
 ## Contributing
