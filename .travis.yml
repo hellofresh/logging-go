@@ -15,5 +15,5 @@ install:
 script:
   - make test
   # run coverage only if token is present
-  - test $COVERALLS_TOKEN && $GOPATH/bin/overalls -project=github.com/hellofresh/logging-go -covermode=count
-  - test $COVERALLS_TOKEN && $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
+  - (test $COVERALLS_TOKEN && $GOPATH/bin/overalls -project=github.com/hellofresh/logging-go -covermode=count) || echo "Skipping coverage tests due to missing token"
+  - (test $COVERALLS_TOKEN && $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN) || echo "Skipping coverage tests due to missing token"
