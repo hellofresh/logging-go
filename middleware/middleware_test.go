@@ -31,7 +31,8 @@ func TestMiddleware(t *testing.T) {
 }
 
 func testRecorded(t *testing.T, r *http.Request, w *httptest.ResponseRecorder) {
-	New(http.HandlerFunc(ping)).ServeHTTP(w, r)
+	mw := New()
+	mw(http.HandlerFunc(ping)).ServeHTTP(w, r)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
