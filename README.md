@@ -179,6 +179,41 @@ func main() {
 }
 ```
 
+### Track requests metrics with middleware
+
+```go
+package main
+
+import (
+        "net/http"
+        
+        "github.com/go-chi/chi"
+        "github.com/hellofresh/logging-go/middleware"
+)
+
+func main() {
+        appConfig, err := LoadAppConfig()
+        if nil != err {
+                panic(err)
+        }
+
+        err = appConfig.Log.Apply()
+        if nil != err {
+                panic(err)
+        }
+        defer appConfig.Log.Flush()
+
+        r := chi.NewRouter()
+        r.Use(middleware.New())
+
+        r.GET("/", func(c *gin.Context) {
+                c.JSON(http.StatusOK, "I'm producing logs!")
+        })
+
+        http.ListenAndServe(":8080", r)
+}
+```
+
 ## Configuration
 
 ### Base logger
