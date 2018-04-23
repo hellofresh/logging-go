@@ -20,6 +20,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/felixge/httpsnoop"
+  packages = ["."]
+  revision = "eadd4fad6aac69ae62379194fe0219f3dbc80fd3"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "629574ca2a5df945712d3079857300b5e4da0236"
@@ -183,6 +189,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ce770f4b6a12d8f6074938068c980d759d7f6e4b5ff27e062e83b95052b9a787"
+  inputs-digest = "096954953afbe168a1d54fd8424323d90fc63dbee51e178406ab78c9ef394410"
   solver-name = "gps-cdcl"
   solver-version = 1
