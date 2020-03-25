@@ -1,8 +1,8 @@
-# Contributing to hellofresh/stats-go
+# Contributing to hellofresh/logging-go
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
-The following is a set of guidelines for contributing to `hellofresh/stats-go`, 
+The following is a set of guidelines for contributing to `hellofresh/logging-go`, 
 which are hosted in the [HelloFresh Organization](https://github.com/hellofresh) on GitHub.
 These are just guidelines, not rules. Use your best judgment, and feel free to propose changes 
 to this document in a pull request.
@@ -13,13 +13,13 @@ This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDU
 By participating, you are expected to uphold this code.
 Please report unacceptable behavior to [engineering@hellofresh.com](mailto:engineering@hellofresh.com).
 
-We accept contributions via Pull Requests on [Github](https://github.com/hellofresh/stats-go).
+We accept contributions via Pull Requests on [Github](https://github.com/hellofresh/logging-go).
 
 ## How Can I Contribute?
 
 ### Reporting Bugs
 
-This section guides you through submitting a bug report for `hellofresh/stats-go`. Following these guidelines helps maintainers 
+This section guides you through submitting a bug report for `hellofresh/logging-go`. Following these guidelines helps maintainers 
 and the community understand your report :pencil:, reproduce the behavior :computer: :computer:, and find related 
 reports :mag_right:.
 
@@ -33,7 +33,7 @@ Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/).
 Explain the problem and include additional details to help maintainers reproduce the problem:
 
 * **Use a clear and descriptive title** for the issue to identify the problem.
-* **Describe the exact steps which reproduce the problem** in as many details as possible. For example, start by explaining how you started `hellofresh/stats-go`, 
+* **Describe the exact steps which reproduce the problem** in as many details as possible. For example, start by explaining how you started `hellofresh/logging-go`, 
 e.g. which command exactly you used in the terminal. When listing steps, **don't just say what you did, but explain how you did it**.
 * **Provide specific examples to demonstrate the steps**. Include links to files or GitHub projects, or copy/pasteable snippets, which you use in those examples. 
 If you're providing snippets in the issue, use [Markdown code blocks](https://help.github.com/articles/markdown-basics/#multiple-lines).
@@ -42,12 +42,12 @@ If you're providing snippets in the issue, use [Markdown code blocks](https://he
 
 Include details about your configuration and environment:
 
-* **Which version of `hellofresh/stats-go` are you using?**
+* **Which version of `hellofresh/logging-go` are you using?**
 * **What's the name and version of the OS you're using**?
 
 ### Your First Code Contribution
 
-Unsure where to begin contributing to `hellofresh/stats-go`? You can start by looking through these `beginner` and `help-wanted` issues:
+Unsure where to begin contributing to `hellofresh/logging-go`? You can start by looking through these `beginner` and `help-wanted` issues:
 
 * [Beginner issues][beginner] - issues which should only require a few lines of code, and a test or two.
 * [Help wanted issues][help-wanted] - issues which should be a bit more involved than `beginner` issues.

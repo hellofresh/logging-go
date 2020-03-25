@@ -19,11 +19,11 @@ import (
 
 var (
 	// ErrUnknownLogHookFormat is the error returned when trying to initialise hook of unknown format
-	ErrUnknownLogHookFormat = errors.New("Failed to init log hooks: unknown hook found")
+	ErrUnknownLogHookFormat = errors.New("failed to init log hooks: unknown hook found")
 	// ErrMissingLogHookSetting is the error returned when trying to initialise hook with required settings missing
-	ErrMissingLogHookSetting = errors.New("Failed to init log hooks: missing required hook setting")
+	ErrMissingLogHookSetting = errors.New("failed to init log hooks: missing required hook setting")
 	// ErrFailedToConfigureLogHook is the error returned when hook configuring failed for some reasons
-	ErrFailedToConfigureLogHook = errors.New("Failed to init log hooks: failed to configure hook")
+	ErrFailedToConfigureLogHook = errors.New("failed to init log hooks: failed to configure hook")
 )
 
 // LogFormat type for enumerating available log formats
@@ -169,7 +169,7 @@ func getLogstashFormatter(settings map[string]string) log.Formatter {
 }
 
 func getStackdriverFormatter(settings map[string]string) log.Formatter {
-	options := []stackdriver.Option{}
+	var options []stackdriver.Option
 
 	service, ok := settings["service"]
 	if ok {
