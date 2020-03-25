@@ -6,8 +6,9 @@ import (
 	"time"
 
 	"github.com/felixge/httpsnoop"
-	"github.com/hellofresh/logging-go/context"
 	"github.com/sirupsen/logrus"
+
+	"github.com/hellofresh/logging-go/context"
 )
 
 // New creates a new stats middleware

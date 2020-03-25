@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	logrustash "github.com/bshuster-repo/logrus-logstash-hook"
+	logrusLogstash "github.com/bshuster-repo/logrus-logstash-hook"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -42,9 +42,9 @@ func TestLogConfig_Apply_getFormatter(t *testing.T) {
 
 	c = LogConfig{Format: Logstash}
 	formatter := c.getFormatter()
-	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrusLogstash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ := formatter.(*logrustash.LogstashFormatter)
+	logstashFormatter, _ := formatter.(*logrusLogstash.LogstashFormatter)
 	assert.Equal(t, "", logstashFormatter.Type)
 	assert.Equal(t, "", logstashFormatter.TimestampFormat)
 
@@ -52,17 +52,17 @@ func TestLogConfig_Apply_getFormatter(t *testing.T) {
 
 	c = LogConfig{Format: Logstash, FormatSettings: map[string]string{"type": testType, "ts": "RFC3339"}}
 	formatter = c.getFormatter()
-	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrusLogstash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ = formatter.(*logrustash.LogstashFormatter)
+	logstashFormatter, _ = formatter.(*logrusLogstash.LogstashFormatter)
 	assert.Equal(t, testType, logstashFormatter.Type)
 	assert.Equal(t, time.RFC3339, logstashFormatter.TimestampFormat)
 
 	c = LogConfig{Format: Logstash, FormatSettings: map[string]string{"type": testType, "ts": "RFC3339Nano"}}
 	formatter = c.getFormatter()
-	require.IsType(t, &logrustash.LogstashFormatter{}, formatter)
+	require.IsType(t, &logrusLogstash.LogstashFormatter{}, formatter)
 
-	logstashFormatter, _ = formatter.(*logrustash.LogstashFormatter)
+	logstashFormatter, _ = formatter.(*logrusLogstash.LogstashFormatter)
 	assert.Equal(t, testType, logstashFormatter.Type)
 	assert.Equal(t, time.RFC3339Nano, logstashFormatter.TimestampFormat)
 }
@@ -107,8 +107,8 @@ func TestLogConfig_Apply_initHooks(t *testing.T) {
 }
 
 func TestLogHooks_UnmarshalText(t *testing.T) {
-	setGlobalConfigEnv()
-	os.Setenv("LOG_HOOKS", `[{broken:json"]}`)
+	setGlobalConfigEnv(t)
+	require.NoError(t, os.Setenv("LOG_HOOKS", `[{broken:json"]}`))
 
 	v := viper.New()
 	InitDefaults(v, "")
@@ -137,7 +137,7 @@ func TestLoad(t *testing.T) {
 }
 
 func TestLoad_fallbackToEnv(t *testing.T) {
-	setGlobalConfigEnv()
+	setGlobalConfigEnv(t)
 
 	v := viper.New()
 	InitDefaults(v, "")
@@ -149,7 +149,7 @@ func TestLoad_fallbackToEnv(t *testing.T) {
 }
 
 func TestLoadConfigFromEnv(t *testing.T) {
-	setGlobalConfigEnv()
+	setGlobalConfigEnv(t)
 
 	v := viper.New()
 	InitDefaults(v, "")
@@ -160,12 +160,14 @@ func TestLoadConfigFromEnv(t *testing.T) {
 	assertConfig(t, logConfig)
 }
 
-func setGlobalConfigEnv() {
-	os.Setenv("LOG_LEVEL", "info")
-	os.Setenv("LOG_FORMAT", "logstash")
-	os.Setenv("LOG_FORMAT_SETTINGS", "type:MyService,ts:RFC3339Nano")
-	os.Setenv("LOG_WRITER", "stderr")
-	os.Setenv("LOG_HOOKS", `[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}},{"format":"stackdriver", "settings":{"service":"myservice","version":"v1"}}]`)
+func setGlobalConfigEnv(t *testing.T) {
+	t.Helper()
+
+	require.NoError(t, os.Setenv("LOG_LEVEL", "info"))
+	require.NoError(t, os.Setenv("LOG_FORMAT", "logstash"))
+	require.NoError(t, os.Setenv("LOG_FORMAT_SETTINGS", "type:MyService,ts:RFC3339Nano"))
+	require.NoError(t, os.Setenv("LOG_WRITER", "stderr"))
+	require.NoError(t, os.Setenv("LOG_HOOKS", `[{"format":"logstash", "settings":{"type":"MyService","ts":"RFC3339Nano", "network": "udp","host":"logstash.mycompany.io","port": "8911"}},{"format":"syslog","settings":{"network": "udp", "host":"localhost", "port": "514", "tag": "MyService", "facility": "LOG_LOCAL0", "severity": "LOG_INFO"}},{"format":"graylog","settings":{"host":"graylog.mycompany.io","port":"9000"}},{"format":"stackdriver", "settings":{"service":"myservice","version":"v1"}}]`))
 }
 
 func assertConfig(t *testing.T, logConfig LogConfig) {

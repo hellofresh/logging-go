@@ -3,11 +3,12 @@
 package logging
 
 import (
+	"errors"
 	"fmt"
 	"log/syslog"
 
 	log "github.com/sirupsen/logrus"
-	logrus_syslog "github.com/sirupsen/logrus/hooks/syslog"
+	logrusSyslog "github.com/sirupsen/logrus/hooks/syslog"
 )
 
 var (
@@ -59,7 +60,7 @@ func (c LogConfig) initSyslogHook(h LogHook) error {
 	}
 
 	tag, _ := h.Settings["tag"]
-	hook, err := logrus_syslog.NewSyslogHook(network, fmt.Sprintf("%s:%s", h.Settings["host"], h.Settings["port"]), priority, tag)
+	hook, err := logrusSyslog.NewSyslogHook(network, fmt.Sprintf("%s:%s", h.Settings["host"], h.Settings["port"]), priority, tag)
 	if nil != err {
 		log.WithError(err).WithField("hook", h.Format).Error("Failed to configure hook")
 		return ErrFailedToConfigureLogHook
@@ -73,22 +74,22 @@ func (c LogConfig) initSyslogHook(h LogHook) error {
 func getSyslogPriority(settings map[string]string) (syslog.Priority, error) {
 	severity, ok := settings["severity"]
 	if !ok {
-		return 0, fmt.Errorf("Syslog severity setting is not set")
+		return 0, errors.New("syslog severity setting is not set")
 	}
 
 	facility, ok := settings["facility"]
 	if !ok {
-		return 0, fmt.Errorf("Syslog facility setting is not set")
+		return 0, errors.New("syslog facility setting is not set")
 	}
 
 	severityPriority, ok := severitiesMap[severity]
 	if !ok {
-		return 0, fmt.Errorf("Unknown syslog severity value")
+		return 0, errors.New("unknown syslog severity value")
 	}
 
 	facilityPriority, ok := facilitiesMap[facility]
 	if !ok {
-		return 0, fmt.Errorf("Unknown syslog facility value")
+		return 0, errors.New("unknown syslog facility value")
 	}
 
 	return severityPriority | facilityPriority, nil
